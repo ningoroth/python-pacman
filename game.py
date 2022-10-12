@@ -55,13 +55,13 @@ while running:
             running = False
 
         elif event.type == pg.KEYDOWN:
-            if event.key == pg.K_LEFT:
+            if event.key == pg.K_A:
                 direction = "left"
-            elif event.key == pg.K_RIGHT:
+            elif event.key == pg.K_D:
                 direction = "right"
-            elif event.key == pg.K_UP:
+            elif event.key == pg.K_W:
                 direction = "up"
-            elif event.key == pg.K_DOWN:
+            elif event.key == pg.K_S:
                 direction = "down"
             elif event.key == pg.K_ESCAPE:
                 running = False
