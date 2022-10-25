@@ -9,11 +9,11 @@ import pygame as pg
 pg.mixer.pre_init(44100, 32, 2, 1024)
 pg.mixer.init()
 pg.mixer.music.load("pacman_banging.wav")
-pg.mixer.music.play()
+pg.mixer.music.play(loops = -1)
 
 ## Screen setup ##
 pg.init()
-screen = pg.display.set_mode((600,800))
+screen = pg.display.set_mode((610,400))
 pg.display.set_caption("Pac-Man (clone)")
 
 
@@ -22,7 +22,7 @@ pg.display.set_caption("Pac-Man (clone)")
 pacman_images = []
 for i in range(6):
     img = pg.image.load(f"images/pacman_{i}.png")
-    img = pg.transform.scale(img, (32,32))
+    img = pg.transform.scale(img, (30,30))
     pacman_images.append(img)
 
 
@@ -63,13 +63,13 @@ while running:
             running = False
 
         elif event.type == pg.KEYDOWN:
-            if event.key == pg.K_a:
+            if event.key == pg.K_a or event.key == pg.K_LEFT:
                 direction = "left"
-            elif event.key == pg.K_d:
+            elif event.key == pg.K_d or event.key == pg.K_RIGHT:
                 direction = "right"
-            elif event.key == pg.K_w:
+            elif event.key == pg.K_w or event.key == pg.K_UP:
                 direction = "up"
-            elif event.key == pg.K_s:
+            elif event.key == pg.K_s or event.key == pg.K_DOWN:
                 direction = "down"
             elif event.key == pg.K_ESCAPE:
                 running = False
