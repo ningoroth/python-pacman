@@ -4,27 +4,39 @@
 import time
 import random
 import pygame as pg
-
-## Sound ##
-pg.mixer.pre_init(44100, 32, 2, 1024)
-pg.mixer.init()
-pg.mixer.music.load("pacman_banging.wav")
-pg.mixer.music.play(loops = -1)
-
-## Screen setup ##
-pg.init()
-screen = pg.display.set_mode((610,400))
-pg.display.set_caption("Pac-Man (clone)")
-
-
+from ghost import Ghost
+from pacman import Pacman
 
 ## Load images ##
-pacman_images = []
+pacmanImages = []
 for i in range(6):
-    img = pg.image.load(f"images/pacman_{i}.png")
-    img = pg.transform.scale(img, (30,30))
-    pacman_images.append(img)
+    img = pg.image.load(f"images/pacmanImages/pacman_{i}.png")
+    img = pg.transform.scale(img, (32,32))
+    pacmanImages.append(img)
 
+blueGhost = []
+for i in range(4):
+    img = pg.image.load(f"images/ghostsImages/blue_{i}.png")
+    img = pg.transform.scale(img, (32,32))
+    blueGhost.append(img)
+
+orangeGhost = []
+for i in range(4):
+    img = pg.image.load(f"images/ghostsImages/orange_{i}.png")
+    img = pg.transform.scale(img, (32,32))
+    orangeGhost.append(img)
+
+pinkGhost = []
+for i in range(4):
+    img = pg.image.load(f"images/ghostsImages/pink_{i}.png")
+    img = pg.transform.scale(img, (32,32))
+    pinkGhost.append(img)
+
+redGhost = []
+for i in range(4):
+    img = pg.image.load(f"images/ghostsImages/red_{i}.png")
+    img = pg.transform.scale(img, (32,32))
+    redGhost.append(img)
 
 ## Level ##
 level = []
@@ -46,22 +58,34 @@ with open('level.txt', 'r') as level_file:
 num_rows = len(level)
 num_cols = len(level[0])
 
+## Screen setup ##
+pg.init()
+width = num_cols * 30
+height = num_rows * 30
+screen = pg.display.set_mode((width, height))
+pg.display.set_caption("Pac-Man")
+pg.display.set_icon(pacmanImages[1])
 
+pacman = Pacman(x,y)
 
+ghost = Ghost(width/2, height/2)
+ghost2 = Ghost(width/2, height/2)
+ghost3 = Ghost(width/2, height/2)
+ghost4 = Ghost(width/2, height/2)
 
-## Game Loop ##
-direction = None
+direction = " "
+ghostDirection = " "
+
 running = True
 tick = 0
 while running:
-
 
     # Event loop
     events = pg.event.get()
     for event in events:
         if event.type == pg.QUIT:
             running = False
-
+        
         elif event.type == pg.KEYDOWN:
             if event.key == pg.K_a or event.key == pg.K_LEFT:
                 direction = "left"
@@ -73,16 +97,14 @@ while running:
                 direction = "down"
             elif event.key == pg.K_ESCAPE:
                 running = False
+    
+    ## Movement ##
+    pacman.move(direction)
 
-    # Move
-    if direction == "left":
-        x = x - 5
-    elif direction == "right":
-        x = x + 5
-    elif direction == "up":
-        y = y - 5
-    elif direction == "down":
-        y = y + 5
+    ghost.move(ghostDirection)
+    ghost2.move(ghostDirection)
+    ghost3.move(ghostDirection)
+    ghost4.move(ghostDirection)
 
     # Draw level #
     screen.fill((0,0,0))
@@ -93,21 +115,13 @@ while running:
             if tile == "#":
                 pg.draw.rect(screen, (20,20,220), pg.Rect(left+1, top+1, 30,30), 1)
 
+    # Draw
+    pacman.draw(direction)
 
-
-    # Draw pacman#
-    r = int((tick/2)%6)
-    if direction == "left":
-        screen.blit(pacman_images[r], (x, y))
-    elif direction == "right":
-        screen.blit(pg.transform.rotate(pacman_images[r],180), (x, y))
-    elif direction == "up":
-        screen.blit(pg.transform.rotate(pacman_images[r],-90), (x, y))
-    elif direction == "down":
-        screen.blit(pg.transform.rotate(pacman_images[r],90), (x, y))
-    else:
-        screen.blit(pacman_images[0], (x, y))
-            
+    ghost.draw()
+    ghost2.draw()
+    ghost3.draw()
+    ghost4.draw()
 
     # Update screen
     pg.display.flip()
